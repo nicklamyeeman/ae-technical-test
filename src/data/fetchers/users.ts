@@ -4,15 +4,15 @@ import { NextRequest } from "next/server";
 import { cookies } from "next/headers";
 import { BaseUser } from "../types/users";
 
-export const getUserIdFromToken = async (request?: NextRequest) => {
+export const getUserFromToken = async (request?: NextRequest) => {
   try {
     const token = await getUserToken(request);
 
     if (token) {
       const decodedToken: any = verify(token, process.env.TOKEN_SECRET!);
-      return (decodedToken as BaseUser).id;
+      return decodedToken as BaseUser;
     }
-    return "";
+    return null;
   } catch (error: any) {
     throw new Error(error.message);
   }

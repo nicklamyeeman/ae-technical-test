@@ -24,13 +24,12 @@ export async function POST(request: NextRequest) {
       email,
       password: hashedPassword,
     });
-
     const savedUser = await newUser.save();
 
     return NextResponse.json({
       message: "User created successfully",
       success: true,
-      savedUser,
+      data: savedUser,
     });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

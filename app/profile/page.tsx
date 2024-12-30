@@ -1,15 +1,15 @@
 import ProfilePage from "@/components/profile/profile";
-import { getUserIdFromToken } from "@/data/fetchers/users";
+import { getUserFromToken } from "@/data/fetchers/users";
 import { notFound } from "next/navigation";
 
 export default async function Profile() {
-  const userId = await getUserIdFromToken();
-  if (!userId) {
+  const user = await getUserFromToken();
+  if (!user) {
     notFound();
   }
   return (
     <div>
-      <ProfilePage userId={userId} />
+      <ProfilePage userId={user.id} />
     </div>
   );
 }

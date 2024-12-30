@@ -1,7 +1,7 @@
 "use client";
 
 import { BaseUser } from "@/data/types/users";
-import { fetchApi } from "@/data/utils";
+import { fetchApi } from "@/data/utils/utils";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
