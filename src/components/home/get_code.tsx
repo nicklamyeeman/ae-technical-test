@@ -2,8 +2,8 @@
 
 import { Pointer } from "@/data/types/pointing";
 import { BaseUser } from "@/data/types/users";
+import { fetchApi } from "@/data/utils/api";
 import { sendMail } from "@/data/utils/send_mail";
-import { fetchApi } from "@/data/utils/utils";
 import { useCallback } from "react";
 
 export const GetCode: React.FC<{
@@ -18,7 +18,7 @@ export const GetCode: React.FC<{
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ type: "check-in", userId: user.id }),
+      body: JSON.stringify({ type: "check-out", userId: user.id }),
     });
     sendMail({
       sendTo: user.email,

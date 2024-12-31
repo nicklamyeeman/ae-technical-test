@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import Pointer from "@/data/mongodb/models/pointer";
+import { localeFormattedDate } from "@/data/utils/date";
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,7 +12,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid type" }, { status: 400 });
     }
 
-    const timestamp = new Date().getTime();
+    const timestamp = new Date(localeFormattedDate()).getTime();
     const pointerCode = timestamp >> 7;
     if (!timestamp || !pointerCode) {
       return NextResponse.json(

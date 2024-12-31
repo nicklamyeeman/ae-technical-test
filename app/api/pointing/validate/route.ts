@@ -4,6 +4,7 @@ import Pointer from "@/data/mongodb/models/pointer";
 import User from "@/data/mongodb/models/user";
 import UserSchedule from "@/data/mongodb/models/user_schedule";
 import { UserScheduleEntry } from "@/data/types/pointing";
+import { isSameDate, localeFormattedDate } from "@/data/utils/date";
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,36 +29,52 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const date = new Date(
-      new Date().toLocaleDateString("fr-FR", { timeZone: "Indian/Reunion" })
-    );
+    const date = new Date(localeFormattedDate());
+    const pointerDate = new Date(pointer.timestamp);
+
+    if (!isSameDate(date, pointerDate)) {
+      return NextResponse.json({ error: "Code is expired" }, { status: 400 });
+    }
 
     let userSchedule = await UserSchedule.findOne({ userId });
+    const todaysHistoryIndex = (userSchedule?.history || []).findIndex(
+      (history: UserScheduleEntry) =>
+        isSameDate(new Date(history.date), new Date(date))
+    );
 
     if (pointer.type === "check-out") {
-      const todaysHistory = (userSchedule?.history || []).find(
-        (history: UserScheduleEntry) =>
-          new Date(history.date).getTime() === date.getTime()
-      );
-      if (!todaysHistory) {
+      if (todaysHistoryIndex === -1) {
         return NextResponse.json(
           { error: "Can't check-out without check-in" },
           { status: 400 }
         );
       }
-      todaysHistory.checkout = new Date(pointer.timestamp);
-    } else {
+      userSchedule.history[todaysHistoryIndex] = {
+        date: userSchedule.history[todaysHistoryIndex].date,
+        checkin: userSchedule.history[todaysHistoryIndex].checkin,
+        checkout: pointerDate,
+      };
+    }
+    if (pointer.type === "check-in") {
       if (!userSchedule) {
         userSchedule = new UserSchedule({
           userId,
           history: [],
         });
       }
-      userSchedule.history.push({
-        date: date,
-        checkin: new Date(pointer.timestamp),
-      });
+      if (todaysHistoryIndex === -1) {
+        userSchedule.history.push({
+          date: date,
+          checkin: pointerDate,
+        });
+      } else {
+        userSchedule.history[todaysHistoryIndex] = {
+          date: userSchedule.history[todaysHistoryIndex].date,
+          checkin: pointerDate,
+        };
+      }
     }
+
     await userSchedule.save();
 
     const response = NextResponse.json({
@@ -66,7 +83,6 @@ export async function POST(request: NextRequest) {
     });
     return response;
   } catch (error: any) {
-    console.log({ error });
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

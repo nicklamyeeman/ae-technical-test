@@ -1,7 +1,7 @@
 "use client";
 
 import { BaseUser } from "@/data/types/users";
-import { fetchApi } from "@/data/utils/utils";
+import { fetchApi } from "@/data/utils/api";
 import { useCallback, useState } from "react";
 
 export const ValidateCode: React.FC<{

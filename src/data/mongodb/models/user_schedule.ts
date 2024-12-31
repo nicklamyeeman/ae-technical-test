@@ -1,7 +1,7 @@
 import { model, models, Schema } from "mongoose";
 
 const userScheduleSchema = new Schema({
-  user: {
+  userId: {
     type: Schema.Types.ObjectId,
     ref: "users",
     required: [true, "Please provide user"],
