@@ -1,11 +1,9 @@
-import { SigninPage } from "@/components/login/login";
+import { Login } from "@/components/auth/login";
 
-const Login: React.FC = () => {
+export default async function LoginPage() {
   return (
     <div>
-      <SigninPage />
+      <Login />
     </div>
   );
-};
-
-export default Login;
+}

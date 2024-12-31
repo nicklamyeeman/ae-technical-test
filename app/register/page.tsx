@@ -1,11 +1,9 @@
-import { SignupPage } from "@/components/login/register";
+import { Register } from "@/components/auth/register";
 
-const Register: React.FC = () => {
+export default async function RegisterPage() {
   return (
     <div>
-      <SignupPage />
+      <Register />
     </div>
   );
-};
-
-export default Register;
+}

@@ -1,8 +1,24 @@
 import { verify } from "jsonwebtoken";
+import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
 
-import { cookies } from "next/headers";
+import User from "../mongodb/models/user";
+import UserSchedule from "../mongodb/models/user_schedule";
 import { BaseUser } from "../types/users";
+
+export const fetchUserSchedule = async (id: string) =>
+  UserSchedule.findOne({ userId: id });
+
+export const fetchUserFromIdlias = async (idLias: string) => {
+  const userFromId = await User.findOne({ _id: idLias })
+    .select("-password")
+    .catch(() => null);
+  const userFromUsername = await User.findOne({ username: idLias })
+    .select("-password")
+    .catch(() => null);
+
+  return userFromId || userFromUsername;
+};
 
 export const getUserFromToken = async (request?: NextRequest) => {
   try {

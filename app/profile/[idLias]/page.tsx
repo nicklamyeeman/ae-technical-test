@@ -1,10 +1,20 @@
-import ProfilePage from "@/components/profile/profile";
+import { Profile } from "@/components/profile/profile";
+import { fetchUserFromIdlias } from "@/data/fetchers/users";
+import { notFound } from "next/navigation";
 
-export default function Profile({ params }: { params: { idLias: string } }) {
-  const userId = params.idLias;
+export default async function ProfilePage({
+  params,
+}: {
+  params: { idLias: string };
+}) {
+  const idLias = params.idLias;
+  const user = await fetchUserFromIdlias(idLias);
+  if (!user) {
+    notFound();
+  }
   return (
     <div>
-      <ProfilePage userId={userId} />
+      <Profile user={user} />
     </div>
   );
 }
