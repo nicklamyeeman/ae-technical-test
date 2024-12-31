@@ -12,9 +12,5 @@ export default async function ProfilePage() {
   if (!user) {
     notFound();
   }
-  return (
-    <div>
-      <Profile user={user} />
-    </div>
-  );
+  return <Profile user={user} />;
 }

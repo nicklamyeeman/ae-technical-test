@@ -19,13 +19,13 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className="w-full min-h-screen h-full">
-      <body className="w-full h-auto m-0 p-0 custom-scrollbar">
+      <body className="w-full h-screen m-0 p-0 custom-scrollbar flex flex-col justify-between">
         <header>
           <Header user={user} />
         </header>
-        <main className="font-sans min-w-screen w-full min-h-screen h-full relative flex flex-col items-center bg-gradient-to-br from-stone-50 to-violet-50">
+        <main className="font-sans min-w-screen w-full h-full relative flex flex-col items-center bg-gradient-to-br from-stone-50 to-violet-50">
           <div id="modal-root"></div>
-          <div className="flex flex-col max-w-[1440px] w-full py-4 pt-14">
+          <div className="flex flex-col max-w-[1440px] h-full w-full pt-14">
             {children}
           </div>
         </main>
