@@ -5,9 +5,9 @@ import { notFound } from "next/navigation";
 export default async function ProfilePage({
   params,
 }: {
-  params: { idLias: string };
+  params: Promise<{ idLias: string }>;
 }) {
-  const idLias = params.idLias;
+  const idLias = (await params).idLias;
   const user = await fetchUserFromIdlias(idLias);
   if (!user) {
     notFound();

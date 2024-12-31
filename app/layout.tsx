@@ -23,7 +23,8 @@ export default async function RootLayout({
         <header>
           <Header user={user} />
         </header>
-        <main className="font-sans min-w-screen w-full min-h-screen h-full relative flex flex-col items-center bg-gradient-to-br from-stone-50 to-rose-50 via-violet-50">
+        <main className="font-sans min-w-screen w-full min-h-screen h-full relative flex flex-col items-center bg-gradient-to-br from-stone-50 to-violet-50">
+          <div id="modal-root"></div>
           <div className="flex flex-col max-w-[1440px] w-full py-4 pt-14">
             {children}
           </div>
