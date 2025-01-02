@@ -27,7 +27,7 @@ export default async function RootLayout({
         <main className="font-sans min-w-screen w-full h-full min-h-max relative flex flex-col items-center bg-gradient-to-br from-stone-50 to-violet-50">
           <SnackbarProvider>
             <div id="modal-root"></div>
-            <div className="flex flex-col max-w-[1440px] h-full w-full pt-14">
+            <div className="flex flex-col max-w-[1440px] h-full w-full pt-14 px-4">
               {children}
             </div>
           </SnackbarProvider>

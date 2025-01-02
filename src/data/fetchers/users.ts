@@ -14,7 +14,7 @@ export const fetchUserScheduleByDate = async (id: string, date: Date) => {
     return Promise.resolve(null);
   }
   return userSchedule.history.find((history: UserScheduleEntry) =>
-    isSameDate(new Date(history.date), new Date(date))
+    isSameDate(history.date, date)
   ) as UserScheduleEntry;
 };
 
@@ -30,6 +30,11 @@ export const fetchUserFromIdlias = async (idLias: string) => {
     .catch(() => null);
 
   return userFromId || userFromUsername;
+};
+
+export const fetchUserRole = async (id: string | null) => {
+  const user = await User.findOne({ _id: id });
+  return user?.role || "user";
 };
 
 export const getUserFromToken = async (request?: NextRequest) => {

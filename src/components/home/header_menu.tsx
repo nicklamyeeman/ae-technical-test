@@ -20,7 +20,7 @@ const OnlineUserHeaderMenu: React.FC<{
         <span className="text-amber-500 font-medium ml-1">{user.username}</span>
       </span>
       <div className="w-full flex hover:bg-stone-200">
-        <Link href="/profile">
+        <Link href="/profile" onClick={onClose}>
           <span className="text-stone-900 whitespace-nowrap flex items-center gap-4 justify-between">
             <AvatarIcon className="w-5 h-5 aspect-square shrink-0 [&>svg]:text-stone-900 bg-opacity-0" />
             Profile

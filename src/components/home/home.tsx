@@ -58,7 +58,7 @@ const OnlineHomeContent: React.FC<{ user: BaseUser }> = async ({ user }) => {
       </div>
       <div className="w-full flex flex-col items-center justify-center gap-4 my-2">
         {userTodaySchedule && (
-          <ul className="w-fit items-start list-disc text-start">
+          <ul className="w-fit items-start sm:list-disc text-start">
             <li className="italic">
               You already check-in today at{" "}
               {new Date(userTodaySchedule.checkin).toLocaleTimeString("en-EN", {

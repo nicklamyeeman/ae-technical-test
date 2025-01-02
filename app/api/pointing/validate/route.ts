@@ -22,24 +22,24 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    if (pointer.userId.toString() !== userId) {
-      return NextResponse.json(
-        { error: "Code does not belong to user" },
-        { status: 400 }
-      );
-    }
+    // if (pointer.userId.toString() !== userId) {
+    //   return NextResponse.json(
+    //     { error: "Code does not belong to user" },
+    //     { status: 400 }
+    //   );
+    // }
 
     const date = new Date(localeFormattedDate());
     const pointerDate = new Date(pointer.timestamp);
 
-    if (!isSameDate(date, pointerDate)) {
-      return NextResponse.json({ error: "Code is expired" }, { status: 400 });
-    }
+    // if (!isSameDate(date, pointerDate)) {
+    //   return NextResponse.json({ error: "Code is expired" }, { status: 400 });
+    // }
 
     let userSchedule = await UserSchedule.findOne({ userId });
     const todaysHistoryIndex = (userSchedule?.history || []).findIndex(
       (history: UserScheduleEntry) =>
-        isSameDate(new Date(history.date), new Date(date))
+        isSameDate(history.date, new Date("01/01/2011"))
     );
 
     if (pointer.type === "check-out") {

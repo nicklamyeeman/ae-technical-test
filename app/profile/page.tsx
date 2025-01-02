@@ -1,7 +1,12 @@
 import { notFound } from "next/navigation";
 
 import { Profile } from "@/components/profile/profile";
-import { fetchUserFromIdlias, getUserFromToken } from "@/data/fetchers/users";
+import {
+  fetchUserFromIdlias,
+  fetchUserRole,
+  getUserFromToken,
+} from "@/data/fetchers/users";
+import { UserRoles } from "@/data/types/users";
 
 export default async function ProfilePage() {
   const userToken = await getUserFromToken();
@@ -12,5 +17,6 @@ export default async function ProfilePage() {
   if (!user) {
     notFound();
   }
-  return <Profile user={user} />;
+  const userRole = await fetchUserRole(user.id);
+  return <Profile user={user} isSelf isAdmin={userRole === UserRoles.ADMIN} />;
 }

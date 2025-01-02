@@ -32,7 +32,7 @@ export const Dialog: React.FC<
     <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
       <div
         ref={dialogRef}
-        className={`bg-white rounded-lg w-1/2 p-4 ${className}}`}
+        className={`${className} bg-white rounded-lg w-full p-4 max-w-6xl`}
       >
         {children}
       </div>
