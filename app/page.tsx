@@ -1,6 +1,7 @@
+import { Metadata } from "next";
+
 import { Home } from "@/components/home/home";
 import { getUserFromToken } from "@/data/fetchers/users";
-import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
   const title = "Pointing App";

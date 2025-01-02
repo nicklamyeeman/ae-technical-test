@@ -1,10 +1,11 @@
 "use client";
 
+import React, { MouseEvent, useCallback, useState } from "react";
+
 import { DeleteIcon } from "@/assets/icons/delete";
 import { DotsVerticalIcon } from "@/assets/icons/dots-vertical";
 import { EditIcon } from "@/assets/icons/edit";
 import { Dropdown } from "@/components/ui/dropdown";
-import React, { MouseEvent, useCallback, useState } from "react";
 import { UserScheduleEntryDeleteDialog } from "./user_schedule_entry_delete_dialog";
 import { UserScheduleEntryEditDialog } from "./user_schedule_entry_edit_dialog";
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import Pointer from "@/data/mongodb/models/pointer";
+import { Pointer } from "@/data/mongodb/models/pointer";
+import { PointerType } from "@/data/types/pointing";
 import { localeFormattedDate } from "@/data/utils/date";
 
 export async function POST(request: NextRequest) {
@@ -8,7 +9,7 @@ export async function POST(request: NextRequest) {
     const reqBody = await request.json();
     const { type, userId } = reqBody;
 
-    if (type !== "check-in" && type !== "check-out") {
+    if (type !== PointerType.CHECKIN && type !== PointerType.CHECKOUT) {
       return NextResponse.json({ error: "Invalid type" }, { status: 400 });
     }
 
@@ -22,10 +23,10 @@ export async function POST(request: NextRequest) {
     }
 
     const newPointer = new Pointer({
-      type,
+      userId,
       timestamp,
       code: pointerCode,
-      userId,
+      type,
     });
     const savedPointer = await newPointer.save();
 

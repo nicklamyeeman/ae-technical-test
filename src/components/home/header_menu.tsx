@@ -1,10 +1,11 @@
 "use client";
+
+import Link from "next/link";
 import React, { MouseEvent, useCallback, useState } from "react";
 
 import { AvatarIcon } from "@/assets/icons/avatar";
 import { ChevronDownIcon } from "@/assets/icons/chevron-down";
 import { BaseUser } from "@/data/types/users";
-import Link from "next/link";
 import { LogoutButton } from "../auth/logout";
 import { Dropdown } from "../ui/dropdown";
 

@@ -2,7 +2,7 @@ import { compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
 
-import User from "@/data/mongodb/models/user";
+import { User } from "@/data/mongodb/models/user";
 import { BaseUser } from "@/data/types/users";
 
 export async function POST(request: NextRequest) {
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     }
 
     const tokenData: BaseUser = {
-      id: user._id,
+      id: user._id.toString(),
       username: user.username,
       email: user.email,
     };

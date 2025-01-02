@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
-import UserSchedule from "@/data/mongodb/models/user_schedule";
+import { UserSchedule } from "@/data/mongodb/models/user_schedule";
 
 export async function DELETE(request: NextRequest) {
   try {

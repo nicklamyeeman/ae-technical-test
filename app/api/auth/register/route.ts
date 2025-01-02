@@ -1,7 +1,7 @@
 import { genSalt, hash } from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 
-import User from "@/data/mongodb/models/user";
+import { User } from "@/data/mongodb/models/user";
 
 export async function POST(request: NextRequest) {
   try {

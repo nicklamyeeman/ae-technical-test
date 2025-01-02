@@ -2,8 +2,8 @@ import { verify } from "jsonwebtoken";
 import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
 
-import User from "../mongodb/models/user";
-import UserSchedule from "../mongodb/models/user_schedule";
+import { User } from "../mongodb/models/user";
+import { UserSchedule } from "../mongodb/models/user_schedule";
 import { UserScheduleEntry } from "../types/pointing";
 import { BaseUser } from "../types/users";
 import { isSameDate } from "../utils/date";

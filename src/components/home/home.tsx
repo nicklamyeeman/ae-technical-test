@@ -1,9 +1,9 @@
+import Link from "next/link";
 import React from "react";
 
 import { fetchUserScheduleByDate } from "@/data/fetchers/users";
 import { BaseUser } from "@/data/types/users";
 import { localeFormattedDate } from "@/data/utils/date";
-import Link from "next/link";
 import { CheckInButton } from "./pointing/checkin_button";
 import { CheckOutButton } from "./pointing/checkout_button";
 import { CodeValidation } from "./pointing/code_validation";

@@ -1,8 +1,9 @@
 "use client";
 
-import { fetchApi } from "@/data/utils/api";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
+
+import { fetchApi } from "@/data/utils/api";
 import { Spinner } from "../ui/spinner";
 
 export const Login: React.FC = () => {

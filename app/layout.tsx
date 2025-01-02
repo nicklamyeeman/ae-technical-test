@@ -1,9 +1,11 @@
+import type { Metadata } from "next";
+
 import { Footer } from "@/components/home/footers";
 import { Header } from "@/components/home/header";
 import { SnackbarProvider } from "@/components/ui/snackbar/snackbar_provider";
 import { getUserFromToken } from "@/data/fetchers/users";
+
 import "@/data/mongodb/config";
-import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {

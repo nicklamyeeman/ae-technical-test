@@ -10,7 +10,7 @@ export const LogoutButton: React.FC = () => {
   const router = useRouter();
   const onLogout = useCallback(async () => {
     try {
-      await fetchApi("/auth/logout").then(() => {
+      await fetchApi("/auth/logout", { method: "POST" }).then(() => {
         router.replace("/");
         router.refresh();
       });

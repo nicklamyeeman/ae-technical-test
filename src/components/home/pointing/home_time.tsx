@@ -1,7 +1,8 @@
 "use client";
 
-import { localeFormattedDate } from "@/data/utils/date";
 import { useEffect, useState } from "react";
+
+import { localeFormattedDate } from "@/data/utils/date";
 
 export const HomeTime: React.FC = () => {
   const today = new Date(localeFormattedDate());

@@ -1,6 +1,8 @@
-import { model, models, Schema } from "mongoose";
+import { Model, model, models, Schema } from "mongoose";
 
-const userScheduleSchema = new Schema({
+import { UserSchedule as IUserSchedule } from "@/data/types/pointing";
+
+const userScheduleSchema = new Schema<IUserSchedule>({
   userId: {
     type: Schema.Types.ObjectId,
     ref: "users",
@@ -18,7 +20,10 @@ const userScheduleSchema = new Schema({
   },
 });
 
-const UserSchedule =
-  models.userschedules || model("userschedules", userScheduleSchema);
-
-export default UserSchedule;
+let UserSchedule: Model<IUserSchedule>;
+if (models.userschedules) {
+  UserSchedule = models.userschedules as Model<IUserSchedule>;
+} else {
+  UserSchedule = model("userschedules", userScheduleSchema);
+}
+export { UserSchedule };

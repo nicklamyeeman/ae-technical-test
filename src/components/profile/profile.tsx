@@ -3,28 +3,23 @@ import { WarningIcon } from "@/assets/icons/warning";
 import { fetchUserSchedule } from "@/data/fetchers/users";
 import { UserScheduleEntry } from "@/data/types/pointing";
 import { BaseUser } from "@/data/types/users";
-import { isSameDate, localeFormattedDate } from "@/data/utils/date";
+import {
+  formatTimeDiff,
+  isSameDate,
+  localeFormattedDate,
+} from "@/data/utils/date";
 import React from "react";
 import { UserScheduleEntryMenuButton } from "./user_schedule_entry/user_schedule_entry_menu_button";
 
-const formatTimeDiff = (duration: number) => {
-  const minutes = Math.floor((duration / (1000 * 60)) % 60);
-  const hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
-
-  return `${hours < 10 ? "0" + hours : hours}h ${
-    minutes < 10 ? "0" + minutes : minutes
-  }min`;
-};
-
 const UserScheduleHistoryTable: React.FC<{
-  userSchedule: Array<UserScheduleEntry & { _id: string }>;
+  userSchedule: Array<UserScheduleEntry>;
   userId: string;
   isAdmin?: boolean;
 }> = ({ userSchedule, userId, isAdmin }) => {
   const today = new Date(localeFormattedDate());
 
   const scheduleData: Array<
-    Omit<UserScheduleEntry, "checkout"> & {
+    Omit<UserScheduleEntry, "checkout" | "_id"> & {
       id: string;
       checkout: Date | null;
       checkoutWarning: boolean;

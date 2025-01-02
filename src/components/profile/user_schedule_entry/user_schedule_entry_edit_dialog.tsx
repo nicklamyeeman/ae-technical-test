@@ -1,7 +1,8 @@
 "use client";
 
-import { Dialog } from "@/components/ui/dialog";
 import React from "react";
+
+import { Dialog } from "@/components/ui/dialog";
 
 export const UserScheduleEntryEditDialog: React.FC<{
   open: boolean;

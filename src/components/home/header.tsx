@@ -3,7 +3,6 @@ import Link from "next/link";
 import React from "react";
 
 import Logo from "@/assets/logo-light.png";
-
 import { BaseUser } from "@/data/types/users";
 import { HeaderMenu } from "./header_menu";
 

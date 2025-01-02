@@ -1,6 +1,8 @@
-import { model, models, Schema } from "mongoose";
+import { model, Model, models, Schema } from "mongoose";
 
-const userSchema = new Schema({
+import { User as IUser, UserRoles } from "@/data/types/users";
+
+const userSchema = new Schema<IUser>({
   username: {
     type: String,
     required: [true, "Please provide username"],
@@ -17,15 +19,15 @@ const userSchema = new Schema({
   },
   role: {
     type: String,
-    enum: ["user", "admin"],
-    default: "user",
+    enum: [UserRoles.ADMIN, UserRoles.USER],
+    default: UserRoles.USER,
   },
-  forgotPasswordToken: String,
-  forgotPasswordTokenExpiry: Date,
-  verifyToken: String,
-  verifyTokenExpiry: Date,
 });
 
-const User = models.users || model("users", userSchema);
-
-export default User;
+let User: Model<IUser>;
+if (models.users) {
+  User = models.users as Model<IUser>;
+} else {
+  User = model("users", userSchema);
+}
+export { User };

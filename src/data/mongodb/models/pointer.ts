@@ -1,6 +1,13 @@
-import { model, models, Schema } from "mongoose";
+import { Model, model, models, Schema } from "mongoose";
 
-const pointerSchema = new Schema({
+import { Pointer as IPointer, PointerType } from "@/data/types/pointing";
+
+const pointerSchema = new Schema<IPointer>({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: "users",
+    required: [true, "Please provide user"],
+  },
   timestamp: {
     type: Number,
     required: [true, "Please provide valid timestamp"],
@@ -11,18 +18,17 @@ const pointerSchema = new Schema({
     required: [true, "Please provide code"],
     unique: true,
   },
-  userId: {
-    type: Schema.Types.ObjectId,
-    ref: "users",
-    required: [true, "Please provide user"],
-  },
   type: {
     type: String,
-    enum: ["check-in", "check-out"],
-    default: "checkin",
+    enum: [PointerType.CHECKIN, PointerType.CHECKOUT],
+    default: PointerType.CHECKIN,
   },
 });
 
-const Pointer = models.pointers || model("pointers", pointerSchema);
-
-export default Pointer;
+let Pointer: Model<IPointer>;
+if (models.pointers) {
+  Pointer = models.pointers as Model<IPointer>;
+} else {
+  Pointer = model("pointers", pointerSchema);
+}
+export { Pointer };

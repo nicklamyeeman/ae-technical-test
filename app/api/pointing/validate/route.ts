@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import Pointer from "@/data/mongodb/models/pointer";
-import User from "@/data/mongodb/models/user";
-import UserSchedule from "@/data/mongodb/models/user_schedule";
-import { UserScheduleEntry } from "@/data/types/pointing";
+import { Pointer } from "@/data/mongodb/models/pointer";
+import { User } from "@/data/mongodb/models/user";
+import { UserSchedule } from "@/data/mongodb/models/user_schedule";
+import { PointerType } from "@/data/types/pointing";
 import { isSameDate, localeFormattedDate } from "@/data/utils/date";
 
 export async function POST(request: NextRequest) {
@@ -22,60 +22,82 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    // if (pointer.userId.toString() !== userId) {
-    //   return NextResponse.json(
-    //     { error: "Code does not belong to user" },
-    //     { status: 400 }
-    //   );
-    // }
+    if (pointer.userId.toString() !== userId) {
+      return NextResponse.json(
+        { error: "Code does not belong to user" },
+        { status: 400 }
+      );
+    }
 
-    const date = new Date(localeFormattedDate());
+    const today = new Date(
+      localeFormattedDate()
+        .replace(/\d{1,2}:\d{2}:\d{2}/gi, "00:00:00")
+        .replace(/PM/g, "AM")
+    );
     const pointerDate = new Date(pointer.timestamp);
 
-    // if (!isSameDate(date, pointerDate)) {
-    //   return NextResponse.json({ error: "Code is expired" }, { status: 400 });
-    // }
+    if (!isSameDate(today, pointerDate)) {
+      return NextResponse.json({ error: "Code is expired" }, { status: 400 });
+    }
 
-    let userSchedule = await UserSchedule.findOne({ userId });
-    const todaysHistoryIndex = (userSchedule?.history || []).findIndex(
-      (history: UserScheduleEntry) =>
-        isSameDate(history.date, new Date("01/01/2011"))
+    let userSchedule = await UserSchedule.findOne(
+      { userId },
+      {
+        history: {
+          $elemMatch: {
+            date: today,
+          },
+        },
+      }
     );
+    if (!userSchedule) {
+      userSchedule = new UserSchedule({
+        userId,
+        history: [],
+      });
+      await userSchedule.save();
+    }
 
-    if (pointer.type === "check-out") {
-      if (todaysHistoryIndex === -1) {
+    if (pointer.type === PointerType.CHECKOUT) {
+      if (!(userSchedule.history || []).length) {
         return NextResponse.json(
           { error: "Can't check-out without check-in" },
           { status: 400 }
         );
       }
-      userSchedule.history[todaysHistoryIndex] = {
-        date: userSchedule.history[todaysHistoryIndex].date,
-        checkin: userSchedule.history[todaysHistoryIndex].checkin,
-        checkout: pointerDate,
-      };
+      await UserSchedule.updateOne(
+        { userId, "history.date": today },
+        {
+          $set: {
+            "history.$.checkout": pointerDate,
+          },
+        }
+      );
     }
-    if (pointer.type === "check-in") {
-      if (!userSchedule) {
-        userSchedule = new UserSchedule({
-          userId,
-          history: [],
-        });
-      }
-      if (todaysHistoryIndex === -1) {
-        userSchedule.history.push({
-          date: date,
-          checkin: pointerDate,
-        });
+    if (pointer.type === PointerType.CHECKIN) {
+      if (!(userSchedule.history || []).length) {
+        await UserSchedule.updateOne(
+          { userId },
+          {
+            $push: {
+              history: {
+                date: today,
+                checkin: pointerDate,
+              },
+            },
+          }
+        );
       } else {
-        userSchedule.history[todaysHistoryIndex] = {
-          date: userSchedule.history[todaysHistoryIndex].date,
-          checkin: pointerDate,
-        };
+        await UserSchedule.updateOne(
+          { userId, "history.date": today },
+          {
+            $set: {
+              "history.$.checkin": pointerDate,
+            },
+          }
+        );
       }
     }
-
-    await userSchedule.save();
 
     const response = NextResponse.json({
       message: `${pointer.type} successful`,

@@ -1,3 +1,5 @@
+import { notFound } from "next/navigation";
+
 import { Profile } from "@/components/profile/profile";
 import {
   fetchUserFromIdlias,
@@ -5,7 +7,6 @@ import {
   getUserFromToken,
 } from "@/data/fetchers/users";
 import { UserRoles } from "@/data/types/users";
-import { notFound } from "next/navigation";
 
 export default async function ProfilePage({
   params,

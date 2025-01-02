@@ -1,12 +1,13 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import React, { useCallback, useState } from "react";
+
 import { DeleteIcon } from "@/assets/icons/delete";
 import { Dialog } from "@/components/ui/dialog";
 import { useSnackbar } from "@/components/ui/snackbar/use_snackbar";
 import { Spinner } from "@/components/ui/spinner";
 import { fetchApi } from "@/data/utils/api";
-import { useRouter } from "next/navigation";
-import React, { useCallback, useState } from "react";
 
 export const UserScheduleEntryDeleteDialog: React.FC<{
   open: boolean;
