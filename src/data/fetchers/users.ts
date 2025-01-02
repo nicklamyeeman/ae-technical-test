@@ -4,7 +4,19 @@ import { NextRequest } from "next/server";
 
 import User from "../mongodb/models/user";
 import UserSchedule from "../mongodb/models/user_schedule";
+import { UserScheduleEntry } from "../types/pointing";
 import { BaseUser } from "../types/users";
+import { isSameDate } from "../utils/date";
+
+export const fetchUserScheduleByDate = async (id: string, date: Date) => {
+  const userSchedule = await UserSchedule.findOne({ userId: id });
+  if (!userSchedule) {
+    return Promise.resolve(null);
+  }
+  return userSchedule.history.find((history: UserScheduleEntry) =>
+    isSameDate(new Date(history.date), new Date(date))
+  ) as UserScheduleEntry;
+};
 
 export const fetchUserSchedule = async (id: string) =>
   UserSchedule.findOne({ userId: id });

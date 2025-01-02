@@ -6,7 +6,7 @@ import { ChevronDownIcon } from "@/assets/icons/chevron-down";
 import { BaseUser } from "@/data/types/users";
 import Link from "next/link";
 import { LogoutButton } from "../auth/logout";
-import { Dropdown } from "../utils/dropdown";
+import { Dropdown } from "../ui/dropdown";
 
 const OnlineUserHeaderMenu: React.FC<{
   user: BaseUser;

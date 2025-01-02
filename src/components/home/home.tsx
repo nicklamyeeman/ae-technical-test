@@ -1,10 +1,13 @@
 import React from "react";
 
+import { fetchUserScheduleByDate } from "@/data/fetchers/users";
 import { BaseUser } from "@/data/types/users";
+import { localeFormattedDate } from "@/data/utils/date";
 import Link from "next/link";
 import { CheckInButton } from "./pointing/checkin_button";
 import { CheckOutButton } from "./pointing/checkout_button";
 import { CodeValidation } from "./pointing/code_validation";
+import { HomeTime } from "./pointing/home_time";
 
 const OfflineHomeContent: React.FC = () => {
   return (
@@ -21,37 +24,67 @@ const OfflineHomeContent: React.FC = () => {
   );
 };
 
-const OnlineHomeContent: React.FC<{ user: BaseUser }> = ({ user }) => {
-  const todayDate = new Date().toLocaleDateString("en-EN", {
-    timeZone: "Indian/Reunion",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-  const todayTime = new Date().toLocaleTimeString("en-EN", {
-    timeZone: "Indian/Reunion",
-    hour: "numeric",
-    minute: "numeric",
-  });
+const OnlineHomeContent: React.FC<{ user: BaseUser }> = async ({ user }) => {
+  const today = new Date(localeFormattedDate());
+  const userTodaySchedule = await fetchUserScheduleByDate(user.id, today);
+
   return (
     <div className="w-full h-full my-2 items-center flex flex-col gap-12 sm:gap-16">
       <div className="w-full items-center flex flex-col text-center">
         <span className="font-medium text-lg text-stone-900">
           Hello, <span className="text-amber-500">{user.username}</span> !
         </span>
-        <span className="text-stone-900">
-          Today is {todayDate} and it's {todayTime}, have a nice day.
-        </span>
+        <HomeTime />
       </div>
-      <div className="w-full sm:flex-row flex-col flex gap-4 items-center justify-between">
-        <div className="w-full sm:w-1/2 flex flex-col gap-2 bg-white rounded-xl shadow-md shadow-stone-200 py-2 px-6">
-          <span className="font-semibold text-stone-900">
-            Get your code to clock in and out for the day
+      <div className="w-full h-fit sm:flex-row flex-col flex gap-4 items-center justify-between">
+        <div className="w-full h-full sm:w-1/2 flex flex-col bg-white rounded-xl shadow-md shadow-stone-200 py-2 px-6">
+          <span className="font-semibold text-stone-900 mb-4">
+            Get your code for clock in and out for the day
           </span>
-          <CheckInButton user={user} />
-          <CheckOutButton user={user} />
+          <div className="w-full items-center flex flex-col sm:flex-row gap-4 mb-2">
+            <CheckInButton user={user} />
+            <div className="flex gap-1 items-center">
+              <div className="w-24 h-[1px] sm:w-[1px] sm:h-10 bg-stone-200" />
+            </div>
+            <CheckOutButton user={user} disabled={!userTodaySchedule} />
+          </div>
         </div>
-        <CodeValidation userId={user.id} />
+        <div className="w-full h-full sm:w-1/2 flex flex-col gap-4 bg-white rounded-xl shadow-md shadow-stone-200 py-2 px-6">
+          <span className="font-semibold text-stone-900 mb-4">
+            Check your code validity to start or end your day
+          </span>
+          <CodeValidation userId={user.id} />
+        </div>
+      </div>
+      <div className="w-full flex flex-col items-center justify-center gap-4 my-2">
+        {userTodaySchedule && (
+          <ul className="w-fit items-start list-disc text-start">
+            <li className="italic">
+              You already check-in today at{" "}
+              {new Date(userTodaySchedule.checkin).toLocaleTimeString("en-EN", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </li>
+            {userTodaySchedule.checkout && (
+              <li className="italic">
+                You already check-out today at{" "}
+                {new Date(userTodaySchedule.checkout).toLocaleTimeString(
+                  "en-EN",
+                  {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }
+                )}
+              </li>
+            )}
+          </ul>
+        )}
+        <Link href="/profile">
+          <button className="disabled:opacity-40 flex w-full items-center justify-center rounded-md bg-opacity-0 px-6 py-1.5 text-sm font-semibold leading-6 text-amber-500 border border-amber-500 shadow-sm hover:bg-amber-500/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500">
+            See my schedule history →
+          </button>
+        </Link>
       </div>
     </div>
   );

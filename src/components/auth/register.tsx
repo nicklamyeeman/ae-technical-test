@@ -3,7 +3,7 @@
 import { fetchApi } from "@/data/utils/api";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
-import { Spinner } from "../utils/spinner";
+import { Spinner } from "../ui/spinner";
 
 export const Register: React.FC = () => {
   const router = useRouter();
@@ -113,7 +113,7 @@ export const Register: React.FC = () => {
                 className="disabled:opacity-40 flex w-full items-center justify-center rounded-md bg-amber-500 px-3 py-1.5 text-sm font-semibold leading-6 text-stone-50 shadow-sm hover:bg-amber-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
               >
                 Register
-                {loading && <Spinner className="mx-2" size={20} color="gray" />}
+                {loading && <Spinner className="ml-2" size={20} color="gray" />}
               </button>
             </div>
           </div>
